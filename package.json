@@ -1,0 +1,57 @@
+{
+  "name": "apitester",
+  "displayName": "apitester",
+  "description": "A postman like api test extension for vscode.",
+  "version": "0.0.2",
+  "publisher": "wyc-apit1",
+  "engines": {
+    "vscode": "^1.37.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:extension.runApiTester"
+  ],
+  "main": "./out/extension.js",
+  "icon": "icon.png",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.runApiTester",
+        "title": "ApiTester: run"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "resourceLangId == yaml",
+          "command": "extension.runApiTester"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.1",
+    "@types/js-yaml": "^3.12.1",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^10.12.21",
+    "@types/vscode": "^1.37.0",
+    "glob": "^7.1.4",
+    "mocha": "^6.1.4",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.1",
+    "vscode-test": "^1.0.2"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "js-yaml": "^3.13.1"
+  }
+}

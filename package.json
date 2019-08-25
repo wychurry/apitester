@@ -2,8 +2,12 @@
   "name": "apitester",
   "displayName": "apitester",
   "description": "A postman like api test extension for vscode.",
-  "version": "0.0.2",
-  "publisher": "wyc-apit1",
+  "version": "0.0.3",
+  "publisher": "wyc-iron",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wychurry/apitester"
+  },
   "engines": {
     "vscode": "^1.37.0"
   },

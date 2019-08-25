@@ -9,8 +9,8 @@ export default function genOption(globalDoc: string, localDoc: string) {
   var globalOption = load(globalDoc);
   var localOption = load(localDoc);
   var fieldName: any;
-  var globalFields = globalOption['field'];
-  var globalVars = globalOption['var'];
+  var globalFields = globalOption ? globalOption['field'] : {};
+  var globalVars = globalOption ? globalOption['var'] : {};
 
   console.log(globalOption);
   console.log(localOption);

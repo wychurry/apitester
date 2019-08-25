@@ -16,18 +16,21 @@ export function activate(context: vscode.ExtensionContext) {
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
 	let disposable = vscode.commands.registerCommand('extension.runApiTester', async () => {
-		var f = vscode.workspace.workspaceFolders;
-		if(!f || f.length === 0){
-			return;
-		}
+		
 		if(vscode.window.activeTextEditor){
 			try{
-				var g = f[0];
-				var globalUri: vscode.Uri = vscode.Uri.file(g.uri.path + '/global.yaml');
-				var globalDoc = await vscode.workspace.fs.readFile(globalUri);
+				var f = vscode.workspace.workspaceFolders;
+				if(!f || f.length === 0){
+					return;
+				}
+				var globalUri: vscode.Uri = vscode.Uri.file(f[0].uri.path + '/global.yaml');
+				var globalDoc = '';
+				try{
+					globalDoc = (await vscode.workspace.fs.readFile(globalUri)).toString();
+				}catch (e) {}
 
 				const localDoc = vscode.window.activeTextEditor.document.getText();
-				const options = genOption(globalDoc.toString(), localDoc);
+				const options = genOption(globalDoc, localDoc);
 				let res = await axios(options);
 				output.show();
 				output.clear();
@@ -35,7 +38,6 @@ export function activate(context: vscode.ExtensionContext) {
 				output.appendLine(JSON.stringify(options, null, 2));
 				output.appendLine('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
 				output.appendLine(JSON.stringify(res.data, null, 2));
-				// vscode.window.showInformationMessage(res.data);
 			}catch (e){
 					output.show();
 					output.clear();

@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
 import genOption from './generator';
+import * as path from 'path';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -18,25 +19,23 @@ export function activate(context: vscode.ExtensionContext) {
 	let disposable = vscode.commands.registerCommand('extension.runApiTester', async () => {
 		
 		if(vscode.window.activeTextEditor){
+			output.show(true);
+			output.clear();
 			try{
-				var f = vscode.workspace.workspaceFolders;
-				if(!f || f.length === 0){
-					return;
-				}
-				var globalUri: vscode.Uri = vscode.Uri.file(f[0].uri.path + '/global.yaml');
+				var currFilePath = path.dirname(vscode.window.activeTextEditor.document.uri.path);
+				var globalFile = path.join(currFilePath, 'global.yaml');
+				var globalUri: vscode.Uri = vscode.Uri.file(globalFile);
 				var globalDoc = '';
 				try{
 					globalDoc = (await vscode.workspace.fs.readFile(globalUri)).toString();
 				}catch (e) {}
-
 				const localDoc = vscode.window.activeTextEditor.document.getText();
 				const options = genOption(globalDoc, localDoc);
-				let res = await axios(options);
-				output.show();
-				output.clear();
 				output.appendLine(vscode.window.activeTextEditor.document.fileName);
 				output.appendLine(JSON.stringify(options, null, 2));
-				output.appendLine('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+				output.appendLine('REQUEST <<<<<<<<<<<<<<<<<');
+				let res = await axios(options);
+				output.appendLine('RESPONSE >>>>>>>>>>>>>>>>');
 				output.appendLine(JSON.stringify(res.data, null, 2));
 			}catch (e){
 					output.show();

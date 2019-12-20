@@ -37,3 +37,9 @@ Base function
 
 Update readme
 
+### 0.0.4
+
+1. Extension can be running at any path
+
+2. Fix "url" undefind error
+
